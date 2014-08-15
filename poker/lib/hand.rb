@@ -28,19 +28,49 @@ class Hand
   end
   
   def flush
+    if card_suits.uniq.count == 1
+      return [:flush] + card_values.take(2)
+    end
+    false
   end
-  
+
   def straight
+    if values_count.values.count == 5
+      max = card_values.max
+      if card_values.all? { |i| i.between?(max - 4, max)}
+        return [:straight, max, max]
+      else
+        return false
+      end
+    end
+    
+    false
   end
   
   def three_kind
     if values_count.values.count == 3 && values_count.values.max == 3
+      results = [:three_kind]
+      cards_remaining = values_count.keys
+      values_count.each do |k, v|
+        if v == 3
+          results << k
+          cards_remaining.delete(k)
+        end
+      end
+      return results << cards_remaining.sort[-1]
+    end
+    
+    false
   end
   
   def two_pair
     if values_count.values.count == 3
       results = [:two_pair]
-      
+      pairs = []
+      values_count.each do |k, v|
+        pairs << k if v == 2
+      end
+      return results + pairs.sort.reverse
     end
     
     false
@@ -63,7 +93,7 @@ class Hand
   end
   
   def high_cards
-    result = card_values.sort.reverse.take(2)
+    result = card_values.take(2)
     result.unshift(:high_card)
   end
   
@@ -75,8 +105,12 @@ class Hand
     counts
   end
   
+  def card_suits
+    cards.map { |card| card.suit }
+  end
+  
   def card_values
-    cards.map { |card| card.value }
+    cards.map { |card| card.value }.sort.reverse
   end
   
 end
