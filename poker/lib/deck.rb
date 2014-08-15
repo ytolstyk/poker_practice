@@ -1,4 +1,5 @@
 require_relative './card.rb'
+require_relative "./exceptions.rb"
 
 class Deck
   SUITS = [:spades, :clubs, :hearts, :diamonds]
@@ -7,6 +8,11 @@ class Deck
   
   def initialize
     @cards = populate_deck
+  end
+  
+  def draw(num = 1)
+    raise EmptyDeckError if cards.count < num
+    cards.pop(num)
   end
   
   def populate_deck
