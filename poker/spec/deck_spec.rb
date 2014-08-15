@@ -18,6 +18,7 @@ RSpec.describe Deck do
     it "should draw more than one card when an argument is passed" do
       cards = deck.draw(5)
       expect(cards.size).to eq(5)
+      expect(cards.all? { |card| card.is_a? Card }).to be_true
       expect(deck.size).to eq(47)
     end
     

@@ -1,6 +1,17 @@
 require 'deck'
 
 class Hand
+  TYPE_HASH = {
+    10 => "Straight Flush",
+    9 => "Four of a Kind",
+    8 => "Full House",
+    7 => "Flush",
+    6 => "Straight",
+    5 => "Three of a Kind",
+    4 => "Two Pairs",
+    3 => "Pair",
+    2 => "High Card"
+  }
   
   attr_accessor :cards
   
@@ -13,14 +24,16 @@ class Hand
     hands = [straight_flush, four_kind, full_house, flush, straight,
       three_kind, two_pair, pair, high_cards]
     
-    hands.each do |method|
-      return method if method
+    hands.each_with_index do |method, index|
+      if method
+        return method.unshift(10 - index)
+      end
     end
   end
   
   def straight_flush
     if flush && straight
-      return answer = [:straight_flush] + straight.drop(1)
+      return straight
     end
     
     false
@@ -28,7 +41,7 @@ class Hand
   
   def four_kind
     if values_count.values.include?(4)
-      return [:four_kind, values_count.invert[4], values_count.invert[1]]
+      return [values_count.invert[4], values_count.invert[1]]
     end
     
     false
@@ -36,7 +49,7 @@ class Hand
   
   def full_house
     if values_count.values.count == 2 && card_values.uniq.count == 2
-      return [:full_house, values_count.invert[3], values_count.invert[2]]
+      return [values_count.invert[3], values_count.invert[2]]
     end
     
     false
@@ -44,7 +57,7 @@ class Hand
   
   def flush
     if card_suits.uniq.count == 1
-      return [:flush] + card_values.take(2)
+      return card_values.take(2)
     end
     
     false
@@ -54,7 +67,7 @@ class Hand
     if values_count.values.count == 5
       max = card_values.max
       if card_values.all? { |i| i.between?(max - 4, max)}
-        return [:straight, max, max]
+        return [max, max]
       else
         return false
       end
@@ -65,7 +78,7 @@ class Hand
   
   def three_kind
     if values_count.values.count == 3 && values_count.values.max == 3
-      results = [:three_kind]
+      results = []
       cards_remaining = values_count.keys
       values_count.each do |k, v|
         if v == 3
@@ -81,12 +94,11 @@ class Hand
   
   def two_pair
     if values_count.values.count == 3
-      results = [:two_pair]
       pairs = []
       values_count.each do |k, v|
         pairs << k if v == 2
       end
-      return results + pairs.sort.reverse
+      return pairs.sort.reverse
     end
     
     false
@@ -94,11 +106,11 @@ class Hand
   
   def pair
     if values_count.values.count == 4
-      results = [:pair]
+      results = []
       cards_remaining = values_count.keys
       values_count.each do |k, v|
         if v == 2
-          results << k 
+          results << k
           cards_remaining.delete(k)
         end
       end
@@ -109,8 +121,7 @@ class Hand
   end
   
   def high_cards
-    result = card_values.take(2)
-    result.unshift(:high_card)
+    card_values.take(2)
   end
   
   def values_count
@@ -138,6 +149,7 @@ class Hand
   end
   
   def <=>(hand2)
+    
   end
   
 end

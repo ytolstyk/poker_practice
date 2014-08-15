@@ -19,7 +19,7 @@ RSpec.describe Hand do
         Card.new(6, :hearts)
       ]
       
-      expect(straight_flush.type).to eq([:straight_flush, 6, 6])
+      expect(straight_flush.type).to eq([10, 6, 6])
     end
     
     it "correctly identifies four of a kind" do
@@ -32,7 +32,7 @@ RSpec.describe Hand do
         Card.new(6, :clubs)
       ]
       
-      expect(hand.type).to eq([:four_kind, 5, 6])
+      expect(hand.type).to eq([9, 5, 6])
     end
     
     it "correctly identifies a full house" do
@@ -45,7 +45,7 @@ RSpec.describe Hand do
         Card.new(5, :hearts)
       ]
       
-      expect(hand.type).to eq([:full_house, 3, 5])
+      expect(hand.type).to eq([8, 3, 5])
     end
     
     it "correctly identifies a flush" do
@@ -58,7 +58,7 @@ RSpec.describe Hand do
         Card.new(6, :hearts)
       ]
       
-      expect(hand.type).to eq([:flush, 12, 7])
+      expect(hand.type).to eq([7, 12, 7])
     end
     
     it "correctly identifies a straight" do
@@ -71,7 +71,7 @@ RSpec.describe Hand do
         Card.new(6, :clubs)
       ]
       
-      expect(hand.type).to eq([:straight, 6, 6])
+      expect(hand.type).to eq([6, 6, 6])
     end
     
     it "correctly identifies three of a kind" do
@@ -84,7 +84,7 @@ RSpec.describe Hand do
         Card.new(6, :hearts)
       ]
       
-      expect(hand.type).to eq([:three_kind, 3, 6])
+      expect(hand.type).to eq([5, 3, 6])
     end
   
     it "correctly identifies two pair" do
@@ -97,7 +97,7 @@ RSpec.describe Hand do
         Card.new(5, :diamonds)
       ]
       
-      expect(hand.type).to eq([:two_pair, 5, 2])
+      expect(hand.type).to eq([4, 5, 2])
     end
     
     it "correctly identifies one pair" do
@@ -110,7 +110,7 @@ RSpec.describe Hand do
         Card.new(6, :hearts)
       ]
       
-      expect(hand.type).to eq([:pair, 2, 6])
+      expect(hand.type).to eq([3, 2, 6])
     end
     
     it "correctly identifies a high card" do
@@ -123,7 +123,7 @@ RSpec.describe Hand do
         Card.new(12, :hearts)
       ]
       
-      expect(hand.type).to eq([:high_card, 12, 7])
+      expect(hand.type).to eq([2, 12, 7])
     end
   end
   
