@@ -129,4 +129,15 @@ class Hand
     cards.map { |card| card.value }.sort.reverse
   end
   
+  def [](index)
+    @cards[index]
+  end
+  
+  def []=(index, value)
+    @cards[index] = value
+  end
+  
+  def <=>(hand2)
+  end
+  
 end
