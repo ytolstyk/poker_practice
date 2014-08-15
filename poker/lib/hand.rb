@@ -19,18 +19,34 @@ class Hand
   end
   
   def straight_flush
+    if flush && straight
+      return answer = [:straight_flush] + straight.drop(1)
+    end
+    
+    false
   end
   
   def four_kind
+    if values_count.values.include?(4)
+      return [:four_kind, values_count.invert[4], values_count.invert[1]]
+    end
+    
+    false
   end
   
   def full_house
+    if values_count.values.count == 2 && card_values.uniq.count == 2
+      return [:full_house, values_count.invert[3], values_count.invert[2]]
+    end
+    
+    false
   end
   
   def flush
     if card_suits.uniq.count == 1
       return [:flush] + card_values.take(2)
     end
+    
     false
   end
 
