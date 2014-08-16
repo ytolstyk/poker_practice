@@ -8,6 +8,72 @@ RSpec.describe Hand do
     expect(hand.cards.count).to eq(5)
   end
   
+  describe "#<=>" do
+    before(:each) do
+      @hand = Hand.new(Deck.new)
+      @hand.cards = [
+        Card.new(2, :hearts),
+        Card.new(7, :hearts),
+        Card.new(4, :hearts),
+        Card.new(12, :hearts),
+        Card.new(6, :hearts)
+      ]
+    end
+    
+    it "correctly identifies the same-value hand" do
+      hand2 = Hand.new(Deck.new)
+      hand2.cards = [
+        Card.new(2, :clubs),
+        Card.new(7, :clubs),
+        Card.new(4, :clubs),
+        Card.new(12, :clubs),
+        Card.new(6, :clubs)
+      ]
+      
+      expect(@hand <=> hand2).to eq(0)
+    end
+    
+    it "correctly identifies a better hand of the same type" do
+      hand2 = Hand.new(Deck.new)
+      hand2.cards = [
+        Card.new(2, :clubs),
+        Card.new(7, :clubs),
+        Card.new(4, :clubs),
+        Card.new(13, :clubs),
+        Card.new(6, :clubs)
+      ]
+      
+      expect(@hand <=> hand2).to eq(-1)
+    end
+    
+    it "correctly identifies a better hand of a different type" do
+      hand2 = Hand.new(Deck.new)
+      hand2.cards = [
+        Card.new(2, :clubs),
+        Card.new(2, :spades),
+        Card.new(2, :hearts),
+        Card.new(6, :diamonds),
+        Card.new(6, :clubs)
+      ]
+      
+      expect(@hand <=> hand2).to eq(-1)
+    end
+    
+    it "correctly identifies a worse hand" do
+      hand2 = Hand.new(Deck.new)
+      hand2.cards = [
+        Card.new(2, :clubs),
+        Card.new(2, :spades),
+        Card.new(2, :hearts),
+        Card.new(6, :diamonds),
+        Card.new(6, :clubs)
+      ]
+      
+      expect(hand2 <=> @hand).to eq(1)
+    end
+    
+  end
+  
   describe "#type" do
     it "correctly identifies a straight flush" do
       straight_flush =  Hand.new(Deck.new) 

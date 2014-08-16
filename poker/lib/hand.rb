@@ -149,7 +149,12 @@ class Hand
   end
   
   def <=>(hand2)
+    3.times do |i|
+      return 1 if self.type[i] > hand2.type[i]
+      return -1 if self.type[i] < hand2.type[i]
+    end
     
+    0
   end
   
 end
